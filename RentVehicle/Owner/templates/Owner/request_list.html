@@ -1,0 +1,17 @@
+{% extends "Owner/owner_base.html" %}
+
+{% block Navigation %}
+	<a class="nav-item nav-link" href="{% url 'Owner:CreateVehicle' %}" class="btn btn-simple">Add Vehicle</a>
+{% endblock %}
+
+{% block ownervehicles %}
+
+<h1>Following is the list of all the Request</h1>
+
+<ol>
+  {% for request in request_list %}
+  <h2><li><a href="{% url 'Owner:RequestDetails' pk=request.pk%}">{{request.bookingDate}}</a></li></h2>
+  {% endfor %}
+</ol>
+
+{% endblock %}

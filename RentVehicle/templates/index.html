@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="jumbotron">
+  <h1><font color = "Black">Welcome to RentVehicle!</font></h1>
+  <form method="POST">
+    {% csrf_token %}
+    {{error}}
+    <font color = "black">{{form.as_p}}</font>
+    <input type="submit" name="" value="Submit">
+  </form>
+</div>
+
+{% endblock %}

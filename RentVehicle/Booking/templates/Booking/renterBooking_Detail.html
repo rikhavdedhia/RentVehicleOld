@@ -1,0 +1,30 @@
+{% extends "Booking/renterbooking_base.html" %}
+
+  {% block booking %}
+
+
+      <h1>Following is the details of your booking</h1>
+      <div class="BookingDetails">
+        <img src="{{booking.vehicle.image.url}}" alt="" height="250" width="300">
+        <h2>Car Name: - {{booking.vehicle.make.make}}</h2>
+        <h2>Car Model: - {{booking.vehicle.model.makemodel}}</h2>
+        <h4>Booking Date: - {{booking.bookingDate}}</h4>
+        <h4>Booking price: - {{booking.price}}</h4>
+        <h4>Request Status: - {{booking.requestStatus}}</h4>
+        <h4>Booking Status: - {{booking.bookingStatus}}</h4>
+
+
+
+      {% if booked %}
+
+        <h4>Payment : - Done</h5>
+
+      {% elif accepted %}
+        <a href="{% url "Booking:SelectPayment" pk=booking.pk%}">
+          <button type="submit" name="button">
+            Pay for Booking
+          </button>
+        </a>
+      {% endif %}
+      </div>
+  {% endblock %}

@@ -1,0 +1,20 @@
+{% extends "Booking/renterbooking_base.html" %}
+{% load bootstrap3 %}
+
+{% block booking %}
+<div class="container">
+		<img src="{{vehicle.image.url}}" alt="" height="250" width="300">
+	<h1>{{vehicle.make.make}} {{vehicle.model.makemodel}}</h1>
+  <h2>Booking Details</h2>
+  <form method="POST" action="{% url 'Booking:CreateBooking' VehicleRegistrationNumber=VRnum pk=VRid%}" id="groupForm">
+  	{% csrf_token %}
+  	<h3>Booking Date : {{form.bookingDate}}</h3>
+		<h3><input type="checkbox" onchange="document.getElementById('addDriver').disabled = !this.checked;"> Add Driver</h3>
+		<fieldset disabled id="addDriver">
+			<h3>Additional Driver Name: {{form.additionalDriverName}}</h3>
+			<h3>Additional Driver License Number : {{form.additionalDriverLicense}}</h3>
+		</fieldset>
+  		<button type="submit" class="btn btn-primary btn-large">Create</button>
+  </form>
+</div>
+{% endblock %}

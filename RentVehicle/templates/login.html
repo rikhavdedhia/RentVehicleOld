@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="jumbotron">
+  <h1><font color = "black">Log In as Renter or Owner</font></h1>
+  <a href="{%url 'Account:RenterLogIn'%}">
+    <button type="button" name="btn btn-success">
+      Renter
+    </button>
+  </a>
+  <a href="{%url 'Account:OwnerLogIn'%}">
+    <button type="button" name="btn btn-success">
+      Owner
+    </button>
+  </a>
+
+</div>
+
+{% endblock %}

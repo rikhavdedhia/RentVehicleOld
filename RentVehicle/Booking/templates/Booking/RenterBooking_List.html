@@ -1,0 +1,13 @@
+{% extends "Booking/renterbooking_base.html" %}
+
+{% block booking %}
+
+<h1>Following is the list of all the Booking</h1>
+
+<ol>
+  {% for bookings in booking_list %}
+    <a href="{% url 'Booking:RenterBookingDetails' pk=bookings.pk%}"><p>{{bookings.bookingDate}}</p></a>
+  {% endfor %}
+</ol>
+
+{% endblock %}
