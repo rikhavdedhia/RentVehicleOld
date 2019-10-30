@@ -9,22 +9,32 @@
         <h2>Car Name: - {{booking.vehicle.make.make}}</h2>
         <h2>Car Model: - {{booking.vehicle.model.makemodel}}</h2>
         <h4>Booking Date: - {{booking.bookingDate}}</h4>
-        <h4>Booking price: - {{booking.price}}</h4>
+        {% if booking.negotiationRequest %}
+          <h4>Negotiation price: - {{booking.negotiationPrice}}</h4>
+        {% else %}
+          <h4>Booking price: - {{booking.price}}</h4>
+        {% endif %}
+        <p></p>
         <h4>Request Status: - {{booking.requestStatus}}</h4>
         <h4>Booking Status: - {{booking.bookingStatus}}</h4>
-
-
-
       {% if booked %}
 
-        <h4>Payment : - Done</h5>
+        <h4>Payment : - Done</h4>
 
-      {% elif accepted %}
-        <a href="{% url "Booking:SelectPayment" pk=booking.pk%}">
-          <button type="submit" name="button">
-            Pay for Booking
-          </button>
-        </a>
+      {% elif Owneraccepted %}
+        {%if renterRejected%}
+          <a href="{% url "Booking:SelectPayment" pk=booking.pk %}">
+            <button type="submit" name="button">
+              Pay for Booking
+            </button>
+          </a>
+          <form method="post">
+            {% csrf_token %}
+            <button type="submit" name="button">
+              Cancel Booking
+            </button>
+          </form>
+        {% endif %}
       {% endif %}
       </div>
   {% endblock %}

@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.views import generic
 from Vehicle import models
 from Booking import models as bmodels
+from dropdowndb import models as dmodels
 from . import forms
 from django.http import Http404
 
@@ -68,10 +69,14 @@ class ListAvailableVehicles(generic.ListView):
                     style__style = self.filter.style
                 )
             if self.filter.bookingDate:
+                pk = bmodels.Booking.objects.filter(bookingDate = self.filter.bookingDate)
+                pk = pk.filter(bookingStatus = dmodels.BookingStatus.objects.get(pk=3)).values()
                 print('8')
-                self.vehicles = self.vehicles.exclude(
-                    pk = bmodels.Booking.objects.filter(bookingDate = self.filter.bookingDate).pk
-                )
+                for veh in pk:
+                    print(veh['vehicle_id'])
+                    self.vehicles = self.vehicles.exclude(
+                        pk = veh['vehicle_id']
+                    )
         except:
             return self.vehicles.all()
         else:
@@ -83,8 +88,9 @@ class ListAvailableVehicles(generic.ListView):
             print("Form is valid")
             filterForm = filter_form.save(commit=False)
             try:
-                filter = models.Filter.objects.get(user=self.request.user)
+                filter = models.Filter.objects.filter(user=self.request.user)
                 print("Filter Found")
+                print(type(filter))
                 filter.update(zipcode=filterForm.zipcode,
                               make = filterForm.make,
                               color=filterForm.color,
@@ -96,7 +102,7 @@ class ListAvailableVehicles(generic.ListView):
                               )
             except:
                 print(self.request.user)
-                filter_form.user = self.request.user
+                filterForm.user = self.request.user
                 print("Filter saved")
                 filterForm.save()
         else:

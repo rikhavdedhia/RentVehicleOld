@@ -1,6 +1,7 @@
 from Vehicle import models
 from django import forms
 from dropdowndb.models import ZipCode
+import datetime
 
 class CreateFilter(forms.ModelForm):
     class Meta:
@@ -52,3 +53,9 @@ class CreateFilter(forms.ModelForm):
         # self.fields['rating'].required = False
         # self.fields['style'].required = False
         # self.fields['bookingDate'].required = False
+
+    def clean_bookingDate(self):
+        bookingdate = self.cleaned_data.get('bookingDate')
+        if(bookingdate < datetime.date.today()):
+            raise forms.ValidationError("Booking date has to be future date")
+        return bookingdate

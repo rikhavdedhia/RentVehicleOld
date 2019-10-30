@@ -148,9 +148,9 @@ MEDIA_URL = '/media/'
 
 
 #Email settings
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_USE_TLS = True
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_HOST_USER = "rentvehicle2019@gmail.com"
-MAIL_HOST_PASSWORD = "1427 4397"
+MAIL_HOST_PASSWORD = "Qwe123rty!"
 EMAIL_PORT = 587

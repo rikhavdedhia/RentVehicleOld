@@ -70,3 +70,10 @@ class AcceptRejectBooking(models.Model):
 
     def __str__(self):
         return self.value
+
+class StateTax(models.Model):
+    state = models.ForeignKey(State, on_delete=models.CASCADE)
+    rate = models.DecimalField(max_digits=5,decimal_places = 4)
+
+    def __str__(self):
+        return self.state.state + " " + str(self.rate)

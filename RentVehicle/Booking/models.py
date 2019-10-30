@@ -15,6 +15,8 @@ class Booking(models.Model):
     additionalDriverLicense = models.CharField(max_length=15,null=True)
     requestStatus = models.ForeignKey(RequestStatus, on_delete=models.CASCADE,null=True)
     bookingStatus = models.ForeignKey(BookingStatus, on_delete=models.CASCADE,null=True)
+    negotiationRequest = models.BooleanField()
+    negotiationPrice = models.DecimalField(max_digits=6,decimal_places = 2)
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
@@ -45,7 +47,7 @@ class PaymentDetailsCard(models.Model):
                 "pk": self.booking.pk
             }
         )
-        
+
 class PaymentDetailsCheck(models.Model):
     Bank = models.CharField(max_length=256)
     CheckNumber = models.PositiveIntegerField()

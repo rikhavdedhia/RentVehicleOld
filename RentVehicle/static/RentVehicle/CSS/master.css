@@ -23,3 +23,9 @@ body {
   align-items: center;
   margin: 0px 35% 10px 35%;
 }
+
+.rikhav{
+  border: 1px solid white;
+  background-color: #BEBEBE;
+  margin: 0px 0px 10px 0px;
+}

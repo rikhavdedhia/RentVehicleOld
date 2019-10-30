@@ -6,6 +6,8 @@ from . import models, forms
 from django.http import Http404
 from dropdowndb.models import tempZipcode, ZipCode
 from django.http import HttpResponseRedirect
+from Booking import models as bmodels
+from dropdowndb import models as dmodels
 
 # Create your views here.
 class VehicleList(generic.ListView):
@@ -68,6 +70,16 @@ class VehicleList(generic.ListView):
                 self.vehicles = self.vehicles.filter(
                     style__style = self.filter.style
                 )
+            if self.filter.bookingDate:
+                pk = bmodels.Booking.objects.filter(bookingDate = self.filter.bookingDate)
+                pk = pk.filter(bookingStatus = dmodels.BookingStatus.objects.get(pk=3)).values()
+                print('8')
+                for veh in pk:
+                    print(veh['vehicle_id'])
+                    self.vehicles = self.vehicles.exclude(
+                        pk = veh['vehicle_id']
+                    )
+                print('8')
         except Exception as e:
             print (type(e))
             return ""
@@ -85,7 +97,8 @@ class VehicleList(generic.ListView):
                           style=filterForm.style,
                           StartPrice=filterForm.StartPrice,
                           EndPrice=filterForm.EndPrice,
-                          rating=filterForm.rating
+                          rating=filterForm.rating,
+                          bookingDate=filterForm.bookingDate
                           )
         return redirect('Vehicle:all')
 
