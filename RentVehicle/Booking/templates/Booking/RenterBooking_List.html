@@ -114,7 +114,7 @@
 </div>
 
 <div class="rikhav">
-  <h3>Bookings Rejected by Renter</h3>
+  <h3>Bookings Cancelled by Renter</h3>
   <div class="row">
     {% for bookings in RejectedBookingRenter %}
       <div class="col-lg-4 boxy">
@@ -122,6 +122,34 @@
           <tr>
             <td>
               <h4><a href="{% url 'Booking:RenterBookingDetails' pk=bookings.pk%}">{{bookings.vehicle.make.make}} {{bookings.vehicle.model.makemodel}}</a></h4>
+              <ul>
+                <h6><li>Booking Date: - {{bookings.bookingDate}}</li></h6>
+                  {% if bookings.negotiationRequest %}
+                    <h6><li>Negotiation Price: - {{bookings.negotiationPrice}}</li></h6>
+                  {% else %}
+                    <h6><li>Booking Price: - {{bookings.price}}</li></h6>
+                  {% endif %}
+              </ul>
+            </td>
+            <td>
+              <img src="{{bookings.vehicle.image.url}}" alt="" height="70" width="84">
+            </td>
+          </tr>
+        </table>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+<div class="rikhav">
+  <h3>Past Completed Bookings</h3>
+  <div class="row">
+    {% for bookings in OldBooking %}
+      <div class="col-lg-4 boxy">
+        <table>
+          <tr>
+            <td>
+              <h4><a href="{% url 'Booking:OldBookingDetails' pk=bookings.pk%}">{{bookings.vehicle.make.make}} {{bookings.vehicle.model.makemodel}}</a></h4>
               <ul>
                 <h6><li>Booking Date: - {{bookings.bookingDate}}</li></h6>
                   {% if bookings.negotiationRequest %}

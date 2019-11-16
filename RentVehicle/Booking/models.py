@@ -15,7 +15,7 @@ class Booking(models.Model):
     additionalDriverLicense = models.CharField(max_length=15,null=True)
     requestStatus = models.ForeignKey(RequestStatus, on_delete=models.CASCADE,null=True)
     bookingStatus = models.ForeignKey(BookingStatus, on_delete=models.CASCADE,null=True)
-    negotiationRequest = models.BooleanField()
+    negotiationRequest = models.BooleanField(default=False)
     negotiationPrice = models.DecimalField(max_digits=6,decimal_places = 2)
 
     def save(self, *args, **kwargs):

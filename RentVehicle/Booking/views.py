@@ -10,6 +10,9 @@ from Booking import models as bmodels
 from django.core.mail import send_mail,get_connection
 from django.conf import settings
 from django.views.generic.edit import ModelFormMixin
+import datetime
+from Renter import models as rmodels
+from Owner import models as omodels
 
 class CreateBooking(generic.CreateView):
     form_class = forms.CreateBooking
@@ -20,6 +23,7 @@ class CreateBooking(generic.CreateView):
         kwargs = super(CreateBooking, self).get_form_kwargs()
         #kwargs['VehNum'] = self.kwargs.get('VehicleRegistrationNumber') # the trick!
         kwargs.update({'VehNum': self.kwargs.get('VehicleRegistrationNumber')})
+        kwargs.update({'user': self.request.user})
         print("in get_form_kwargs")
         return kwargs
 
@@ -75,11 +79,15 @@ class RenterBookingList(generic.ListView):
                 requestStatus = dmodels.RequestStatus.objects.get(pk=3)
             ).filter(
                 bookingStatus = dmodels.BookingStatus.objects.get(pk=1)
+            ).filter(
+                bookingDate__gte = datetime.date.today()
             )
         context['RejectedBookingOwner'] = models.Booking.objects.filter(
                 user = self.request.user
             ).filter(
                 requestStatus = dmodels.RequestStatus.objects.get(pk=2)
+            ).filter(
+                bookingDate__gte = datetime.date.today()
             )
         context['RejectedBookingRenter'] = models.Booking.objects.filter(
                 user = self.request.user
@@ -87,6 +95,8 @@ class RenterBookingList(generic.ListView):
                 requestStatus = dmodels.RequestStatus.objects.get(pk=3)
             ).filter(
                 bookingStatus = dmodels.BookingStatus.objects.get(pk=2)
+            ).filter(
+                bookingDate__gte = datetime.date.today()
             )
         context['CompletedBooking'] = models.Booking.objects.filter(
                 user = self.request.user
@@ -94,6 +104,19 @@ class RenterBookingList(generic.ListView):
                 requestStatus = dmodels.RequestStatus.objects.get(pk=3)
             ).filter(
                 bookingStatus = dmodels.BookingStatus.objects.get(pk=3)
+            ).filter(
+                bookingDate__gte = datetime.date.today()
+            ).filter(
+                bookingDate__gte = datetime.date.today()
+            )
+        context['OldBooking'] = models.Booking.objects.filter(
+                user = self.request.user
+            ).filter(
+                requestStatus = dmodels.RequestStatus.objects.get(pk=3)
+            ).filter(
+                bookingStatus = dmodels.BookingStatus.objects.get(pk=3)
+            ).filter(
+                bookingDate__lte = datetime.date.today()
             )
         return context
 
@@ -103,6 +126,8 @@ class RenterBookingList(generic.ListView):
                 user = self.request.user
             ).filter(
                 requestStatus = dmodels.RequestStatus.objects.get(pk=1)
+            ).filter(
+                bookingDate__gte = datetime.date.today()
             )
         except Exception as e:
             print (type(e))
@@ -209,3 +234,31 @@ def EmailSender(curr_booking,RenterEmail,OwnerEmail):
     recipient_list = ['rikhavdedhia.2016@gmail.com']#,'d.parikh511@gmail.com','mit.sheth00796@gmail.com','vrajshah180@gmail.com']
     send_mail( subject, message_renter, email_from, RenterEmail,connection=new_conn)
     send_mail( subject, message_owner, email_from, OwnerEmail,connection=new_conn)
+
+class OldBookingDetails(generic.DetailView):
+        model = models.Booking
+        template_name = "Booking/oldBooking_Detail.html"
+
+        def get_context_data(self, **kwargs):
+            context = super().get_context_data(**kwargs)
+            try:
+                feedback = rmodels.VehicleFeedback.objects.get(booking__pk=self.kwargs.get('pk'))
+                context["feedBackGiven"] = False
+                context['feedback'] = feedback
+            except:
+                context["feedBackGiven"] = True
+            return context
+
+class OwnerBookingDetails(generic.DetailView):
+        model = models.Booking
+        template_name = "Booking/OwnerBooking_Detail.html"
+
+        def get_context_data(self, **kwargs):
+            context = super().get_context_data(**kwargs)
+            try:
+                feedback = omodels.RenterFeedback.objects.get(booking__pk=self.kwargs.get('pk'))
+                context["feedBackGiven"] = False
+                context['feedback'] = feedback
+            except:
+                context["feedBackGiven"] = True
+            return context

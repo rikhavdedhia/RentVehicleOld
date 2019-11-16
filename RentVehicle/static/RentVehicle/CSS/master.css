@@ -1,7 +1,8 @@
 body {
   margin: 0;
   overflow: scroll;
-  background-color: black;
+  background-image: url("img1.jpg");
+  background-size: cover;
   color:white;
 }
 #List_Table{

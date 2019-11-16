@@ -20,10 +20,26 @@
   <form action="{% url "Owner:RequestDetails" pk=booking.pk%}" method="post">
 
     {% csrf_token %}
-    {% bootstrap_form form%}
-
+		<div class="row">
+			<div class="col-lg-4 boxy">
+				{% for f in form %}
+					{% if negotiationRequest == True %}
+						<h5><input type="checkbox" name = "Negotiate"> Accept Negotiation?</h5>
+					{% endif %}
+    			<h5>Your Response: - {{f}}</h5>
+				{% endfor	 %}
+			</div>
+		</div>
     <input type="submit" value="Submit">
 
   </form>
-
+	{% if feedback.count %}
+		<h3>Following are the ratings available for the requested user</h3>
+		{% for f in feedback %}
+			<h5>Rating: - {{f.rating}}</h5>
+			<h5>Description: - {{f.description}}</h5>
+		{% endfor %}
+	{% else %}
+		<h5>No ratings available for the requested used</h5>
+	{% endif %}
 {% endblock %}

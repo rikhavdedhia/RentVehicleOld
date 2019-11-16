@@ -26,6 +26,17 @@ class VehicleList(generic.ListView):
             self.filter = models.Filter.objects.get(user=None)
 
             self.vehicles = models.Vehicle.objects.filter()
+            try:
+                Accident_vehicle = models.Accident.objects.filter(
+                    disabled = True
+                ).values()
+                if len(Accident_vehicle) > 0:
+                    for av in Accident_vehicle:
+                        self.vehicles = self.vehicles.exclude(
+                        pk = av['vehicle_id']
+                        )
+            except:
+                pass
             if self.filter.zipcode:
                 print('1')
                 self.vehicles = self.vehicles.filter(

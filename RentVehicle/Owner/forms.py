@@ -11,3 +11,13 @@ class AcceptRejectForm(forms.ModelForm):
     class Meta:
         model = omodels.AcceptRejectBooking
         fields = ['value']
+
+class GetFeedback(forms.ModelForm):
+    class Meta:
+        model = omodels.RenterFeedback
+        fields = ['rating','description']
+
+class AccidentReport(forms.ModelForm):
+    class Meta:
+        model = models.Accident
+        fields = ['disabled','description']

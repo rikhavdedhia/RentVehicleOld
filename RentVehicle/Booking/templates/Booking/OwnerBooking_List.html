@@ -10,7 +10,7 @@
         <table>
           <tr>
             <td>
-              <h4><a href="{% url 'Booking:RenterBookingDetails' pk=bookings.pk%}">{{bookings.vehicle.make.make}} {{bookings.vehicle.model.makemodel}}</a></h4>
+              <h4><a href="{% url 'Booking:OwnerBookingDetails' pk=bookings.pk%}">{{bookings.vehicle.make.make}} {{bookings.vehicle.model.makemodel}}</a></h4>
               <ul>
                 <h6><li>Booking Date: - {{bookings.bookingDate}}</li></h6>
                   {% if bookings.negotiationRequest %}

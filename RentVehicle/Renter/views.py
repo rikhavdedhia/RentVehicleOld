@@ -4,6 +4,7 @@ from Vehicle import models
 from Booking import models as bmodels
 from dropdowndb import models as dmodels
 from . import forms
+from . import models as rmodels
 from django.http import Http404
 
 # Create your views here.
@@ -113,3 +114,29 @@ class VehicleDetails(generic.DetailView):
     model = models.Vehicle
     template_name = "Renter/RenterVehicle_Detail.html"
     context_object_name = "vehicle_detail"
+
+class RenterFeedback(generic.CreateView):
+    form_class = forms.GetFeedback
+    model = rmodels.VehicleFeedback
+    template_name = "Renter/VehicleFeedback.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        BookingDetails = bmodels.Booking.objects.get(
+                pk=self.kwargs.get('pk')
+                )
+        context['BookingDetails'] = BookingDetails
+        print(BookingDetails.vehicle.VehicleRegistrationNumber)
+        return context
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.user = self.request.user
+        self.object.vehicle = models.Vehicle.objects.get(
+            VehicleRegistrationNumber = self.kwargs.get('VehicleRegistrationNumber')
+            )
+        self.object.booking = bmodels.Booking.objects.get(
+            pk = self.kwargs.get('pk')
+        )
+        self.object.save()
+        return super().form_valid(form)

@@ -46,3 +46,11 @@ class Filter(models.Model):
 # class Images(models.Model):
 #     vehicle = models.ForeignKey(Vehicle, on_delete=models.CASCADE)
 #     image = models.ImageField(upload_to = 'car_images', blank = True)
+
+class Accident(models.Model):
+    vehicle = models.ForeignKey(Vehicle, on_delete=models.CASCADE)
+    disabled = models.BooleanField()
+    description = models.CharField(max_length=512)
+
+    def get_absolute_url(self):
+        return reverse('Owner:OwnerVehicles')

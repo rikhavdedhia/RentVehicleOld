@@ -8,10 +8,12 @@ class CreateFilter(forms.ModelForm):
         model = models.Filter
         fields = ['zipcode', 'make', 'color', 'StartPrice', 'EndPrice', 'rating','style','bookingDate']
 
+
     def __init__(self, *args,**kwargs):
         super(CreateFilter, self).__init__(*args, **kwargs)
         filter = models.Filter.objects.get(user=None)
         print("Here")
+        self.fields['bookingDate'].label = 'Date'
         self.fields['zipcode'].initial = filter.zipcode
         self.fields['make'].initial = filter.make
         self.fields['color'].initial = filter.color
@@ -31,6 +33,7 @@ class CreateFilter(forms.ModelForm):
 
     def clean_bookingDate(self):
         bookingdate = self.cleaned_data.get('bookingDate')
-        if(bookingdate < datetime.date.today()):
-            raise forms.ValidationError("Booking date has to be future date")
+        if(bookingdate):
+            if(bookingdate < datetime.date.today()):
+                raise forms.ValidationError("Booking date has to be future date")
         return bookingdate

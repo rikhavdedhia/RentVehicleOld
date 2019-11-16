@@ -1,3 +1,4 @@
+# https://developer.mozilla.org/en-US/docs/Learn/Server-side/Django/Forms
 from . import models
 from django import forms
 import datetime
@@ -11,12 +12,15 @@ class CreateBooking(forms.ModelForm):
 
     def __init__(self,*args,**kwargs):
         self.vehNum = kwargs.pop('VehNum')
+        self.user = kwargs.pop('user')
         super(CreateBooking,self).__init__(*args, **kwargs)
+        self.fields['bookingDate'].initial = vmodels.Filter.objects.get(user=self.user).bookingDate
         self.fields['additionalDriverName'].required = False
         self.fields['additionalDriverLicense'].required = False
         self.fields['negotiationPrice'].required = False
 
     def clean_bookingDate(self):
+        print("Cleaning Booking")
         bookingdate = self.cleaned_data.get('bookingDate')
         if(bookingdate < datetime.date.today()):
             raise forms.ValidationError("Booking date has to be future date")
